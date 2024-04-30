@@ -153,8 +153,9 @@ export class ArticleService {
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
+    
     const article = new Article(user!, dto.title, dto.description, dto.body);
-    article.tagList.push(...(dto.tagList as any).split(" "));
+    article.tagList = dto.tagList.split(/ |[^a-zA-Z0-9]/).filter(Boolean);
     user?.articles.add(article);
     await this.em.flush();
 
